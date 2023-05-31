@@ -1231,8 +1231,91 @@ sha('Senai') as dados_criptografados,
 sha1('Senai') as dados_criptografados,
 sha2('Senai',256) as dados_criptografados;
 
+#################################### Aula 31/05  ####################################
+# RELACIONAMENTO ENTRE TABELAS
+
+## RELACIONAMENTO PELO WHERE
+
+#Exemplo 1
+select tbl_ator.nome, tbl_ator.data_nascimento,
+	   tbl_sexo.sigla	
+
+from   tbl_ator, tbl_sexo
+# é quem especifica a relação entre as duas tabelas
+where  tbl_sexo.id = tbl_ator.id_sexo;
+
+#Exemplo 2
+select tbl_ator.nome, tbl_ator.foto, tbl_ator.biografia,
+	   tbl_sexo.sigla, tbl_sexo.nome,
+       tbl_nacionalidade.nome
+
+from   tbl_ator, tbl_sexo, tbl_nacionalidade, tbl_ator_nacionalidade
+
+where tbl_sexo.id = tbl_ator.id_sexo and 
+	  tbl_ator.id = tbl_ator_nacionalidade.id_ator and
+      tbl_nacionalidade.id = tbl_ator_nacionalidade.id_nacionalidade;
+       
+
+## RELACIONAMENTO PELO FROM   
+
+#Exemplo 1
+select tbl_ator.nome, tbl_ator.data_nascimento,
+       tbl_sexo.sigla
+       
+from   tbl_ator
+			inner join tbl_sexo
+				on tbl_sexo.id = tbl_ator.id_sexo;
 
 
+#Exemplo 2
+select tbl_ator.nome, tbl_ator.foto, tbl_ator.biografia,
+	   tbl_sexo.sigla, tbl_sexo.nome,
+       tbl_nacionalidade.nome
+
+from tbl_ator
+		inner join tbl_sexo
+			on tbl_sexo.id = tbl_ator.id_sexo
+        inner join tbl_ator_nacionalidade 
+			on tbl_ator.id = tbl_ator_nacionalidade.id_ator
+        inner join tbl_nacionalidade
+			on tbl_nacionalidade.id = tbl_ator_nacionalidade.id_nacionalidade;
+            
+            
+################################# Relações que o professor pediu pra fazermos sozinhos #########################################
+
+select tbl_filme.nome as nome_filme,tbl_filme.data_lancamento,tbl_filme.sinopse,
+		tbl_genero.nome as nome_genero,
+        tbl_ator.nome as nome_ator, tbl_ator.biografia,
+        tbl_nacionalidade.nome as nome_nacionalidade_ator,
+        tbl_sexo.nome as nome_sexo_ator
+        
+from tbl_filme							#Relacionamento Filme x Genero
+			inner join tbl_filme_genero
+              on tbl_filme.id = tbl_filme_genero.id_filme
+			inner join tbl_genero
+             on tbl_genero.id = tbl_filme_genero.id_genero
+										#Relacionamento Filme x Ator
+			inner join tbl_filme_ator
+              on tbl_filme.id = tbl_filme_ator.id_filme
+										#Relacionamento Ator x Filme
+			inner join tbl_ator
+              on tbl_ator.id = tbl_filme_ator.id_ator
+										#Relacionamento Ator x Nacionalidade
+			inner join tbl_ator_nacionalidade
+              on tbl_ator.id = tbl_ator_nacionalidade.id_ator
+			inner join tbl_nacionalidade
+              on tbl_nacionalidade.id = tbl_ator_nacionalidade.id_nacionalidade
+            inner join tbl_sexo			#Relacionamento Ator x Sexo
+			  on tbl_sexo.id = tbl_ator.id_sexo	
+              
+  order by tbl_filme.nome,tbl_ator.nome asc;     
+              
+show tables; 
+select * from tbl_filme_genero;
+select * from tbl_genero where id_genero = 1;
+select * from tbl_filme_genero where id_filme = 4;
+
+select * from tbl_filme;
 
 
 
